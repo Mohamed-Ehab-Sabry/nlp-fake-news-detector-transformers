@@ -1,0 +1,32 @@
+name: Move Issue to In Progress on Branch Creation
+
+# 1. The Trigger: What starts this action?
+on:
+  create: # Listens for when a branch or tag is created
+
+# 2. The Job: What should it do?
+jobs:
+  automate-project-board:
+    # Only run if a branch was created (not a tag)
+    if: github.event.ref_type == 'branch'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Extract Issue Number from Branch Name
+        id: extract
+        # This assumes your branch is named like "12-fix-missing-values"
+        run: |
+          BRANCH_NAME="${{ github.event.ref }}"
+          ISSUE_NUMBER=$(echo $BRANCH_NAME | grep -o -E '^[0-9]+')
+          echo "issue_number=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
+
+      - name: Move Issue in Project Board
+        # We use a pre-built community action to handle the complex API calls
+        uses: leonsteinhaeuser/project-beta-automations@v2.1.0
+        if: steps.extract.outputs.issue_number != ''
+        with:
+          gh_token: ${{ secrets.GITHUB_TOKEN }}
+          organization: your-username-or-org
+          project_id: 1 # The ID number of your project board
+          resource_node_id: ${{ steps.extract.outputs.issue_number }}
+          status_value: "In Progress" # The exact name of your column
