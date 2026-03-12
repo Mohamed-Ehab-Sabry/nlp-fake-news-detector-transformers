@@ -209,6 +209,7 @@ __marimo__/
 # Data files (too large for Git)
 data/raw/*
 data/processed/*
+data/saved_features/*
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 !data/README.md
