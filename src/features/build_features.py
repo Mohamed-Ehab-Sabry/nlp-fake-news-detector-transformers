@@ -82,3 +82,19 @@ def preprocess_split(X_train, X_test):
     X_test_processed = X_test.apply(preprocess_text)
 
     return X_train_processed, X_test_processed
+
+# Initialize and configure the TF-IDF Vectorizer
+def build_tfidf_features(X_train, X_test):
+    vectorizer = TfidfVectorizer(
+        max_features=10000,
+        ngram_range=(1,2),
+        min_df= 2,
+        max_df=0.9,
+        sublinear_tf=True,
+    )
+
+    # Fit the vectorizer on the training data and transform both training and testing sets
+    X_train_tfidf = vectorizer.fit_transform(X_train)
+    X_test_tfidf = vectorizer.transform(X_test)
+
+    return X_train_tfidf, X_test_tfidf, vectorizer
