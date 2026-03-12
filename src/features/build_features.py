@@ -61,3 +61,24 @@ def preprocess_text(text):
     lem_tokens = lemmatize_tokens(tokens_no_stop)
     return " ".join(lem_tokens)
 
+# Split data 
+def split_data(df):
+    X = df["cleaned_text"]
+    y = df["target"]
+    X_train, X_test, y_train, y_test = train_test_split(
+        X,
+        y,
+        test_size=0.2,
+        random_state=42,
+        stratify=y
+    )
+
+    return X_train, X_test, y_train, y_test
+
+# preprocess_split
+def preprocess_split(X_train, X_test):
+
+    X_train_processed = X_train.apply(preprocess_text)
+    X_test_processed = X_test.apply(preprocess_text)
+
+    return X_train_processed, X_test_processed
