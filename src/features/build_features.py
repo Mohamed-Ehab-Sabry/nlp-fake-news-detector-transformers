@@ -106,6 +106,7 @@ DATA_PATH = DATA_DIR / "processed" / "processed.csv"
 FEATURES_DIR = DATA_DIR / "saved_features"
 FEATURES_DIR.mkdir(parents=True, exist_ok=True)
 
+
 # save features
 def save_features(X_train_tfidf, X_test_tfidf, y_train, y_test, vectorizer):
 
@@ -131,5 +132,5 @@ def main():
     save_features(X_train_tfidf, X_test_tfidf, y_train, y_test, vectorizer)
     print("\nFeature engineering completed successfully!")
 
-if __name__ == "_main_":
+if __name__ == "__main__":
     main()
