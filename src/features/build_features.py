@@ -98,3 +98,38 @@ def build_tfidf_features(X_train, X_test):
     X_test_tfidf = vectorizer.transform(X_test)
 
     return X_train_tfidf, X_test_tfidf, vectorizer
+
+# project path
+BASE_DIR = Path(__file__).resolve().parents[2]
+DATA_DIR = BASE_DIR / "data"
+DATA_PATH = DATA_DIR / "processed" / "processed.csv"
+FEATURES_DIR = DATA_DIR / "saved_features"
+FEATURES_DIR.mkdir(parents=True, exist_ok=True)
+
+# save features
+def save_features(X_train_tfidf, X_test_tfidf, y_train, y_test, vectorizer):
+
+    dump(vectorizer, FEATURES_DIR / "tfidf_vectorizer.joblib")
+    dump(X_train_tfidf, FEATURES_DIR / "X_train_tfidf.joblib")
+    dump(X_test_tfidf, FEATURES_DIR / "X_test_tfidf.joblib")
+    dump(y_train, FEATURES_DIR / "y_train.joblib")
+    dump(y_test, FEATURES_DIR / "y_test.joblib")
+
+    print("TF-IDF vectorizer and feature matrices saved successfully")
+    print("X_train shape:", X_train_tfidf.shape)
+    print("X_test shape:", X_test_tfidf.shape)
+
+# main
+def main():
+
+    df = load_clean_data(DATA_PATH)
+
+    X_train, X_test, y_train, y_test = split_data(df)
+    X_train, X_test = preprocess_split(X_train, X_test)
+    X_train_tfidf, X_test_tfidf, vectorizer = build_tfidf_features(X_train, X_test)
+
+    save_features(X_train_tfidf, X_test_tfidf, y_train, y_test, vectorizer)
+    print("\nFeature engineering completed successfully!")
+
+if __name__ == "_main_":
+    main()
