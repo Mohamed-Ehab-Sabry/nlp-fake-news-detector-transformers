@@ -7,13 +7,11 @@ from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from joblib import dump
 from pathlib import Path
-from nltk.corpus import wordnet
 
 # NLTK downloads
 nltk.download('punkt')
 nltk.download('wordnet')
 nltk.download('stopwords')
-nltk.download('averaged_perceptron_tagger') 
 
 # load cleaned dataset
 def load_clean_data(filepath):
@@ -33,25 +31,10 @@ def tokenize(text):
 def remove_stopwords(tokens):
     return [word for word in tokens if word.isalpha() and len(word) > 2 and word not in stop_words]
 
-
-def get_wordnet_pos(treebank_tag):
-    if treebank_tag.startswith('J'):
-        return wordnet.ADJ
-    elif treebank_tag.startswith('V'):
-        return wordnet.VERB
-    elif treebank_tag.startswith('N'):
-        return wordnet.NOUN
-    elif treebank_tag.startswith('R'):
-        return wordnet.ADV
-    else:
-        return wordnet.NOUN 
-
-
     
 # Lemmatization
 def lemmatize_tokens(tokens):
-    pos_tags = nltk.pos_tag(tokens) 
-    lem_tokens = [lemmatizer.lemmatize(word, get_wordnet_pos(pos)) for word, pos in pos_tags]
+    lem_tokens = [lemmatizer.lemmatize(word) for word in tokens]
     return lem_tokens
 
 # Text preprocessing pipeline
