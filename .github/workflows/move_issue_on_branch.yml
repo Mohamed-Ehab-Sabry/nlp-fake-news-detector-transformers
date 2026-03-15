@@ -10,15 +10,19 @@ jobs:
     # Only run if a branch was created (not a tag)
     if: github.event.ref_type == 'branch'
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Extract Issue Number from Branch Name
         id: extract
-        # This assumes your branch is named like "12-fix-missing-values"
+        # Extract the first number anywhere in the branch name, e.g. "feature/4-some-change"
         run: |
           BRANCH_NAME="${{ github.event.ref }}"
-          ISSUE_NUMBER=$(echo $BRANCH_NAME | grep -o -E '^[0-9]+')
-          echo "issue_number=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
+          ISSUE_NUMBER=$(echo "$BRANCH_NAME" | grep -o -E '[0-9]+' | head -1)
+          if [ -z "$ISSUE_NUMBER" ]; then
+            echo "No issue number found in branch name: $BRANCH_NAME"
+            exit 0  # Or fail the workflow, if required
+          fi
+          echo "issue_number=$ISSUE_NUMBER" >> "$GITHUB_OUTPUT"
 
       - name: Move Issue in Project Board
         # We use a pre-built community action to handle the complex API calls
