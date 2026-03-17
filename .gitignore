@@ -223,3 +223,8 @@ results/models/*
 
 # Config secrets
 configs/secrets.yaml
+
+# Ignore Large Files and Models
+data/*.csv
+results/models/
+*.joblib
