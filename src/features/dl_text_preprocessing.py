@@ -34,3 +34,10 @@ def build_tokenizer(X_train, max_words = 20000):
     tokenizer = Tokenizer(num_words = max_words, oov_token = "<OOV>")
     tokenizer.fit_on_texts(X_train)
     return tokenizer
+
+# convert text to sequences
+def text_to_sequence(tokenizer, X_train, X_val, X_test):
+    X_train_seq = tokenizer.texts_to_sequences(X_train)
+    X_val_seq = tokenizer.texts_to_sequences(X_val)
+    X_test_seq = tokenizer.texts_to_sequences(X_test)
+    return X_train_seq, X_val_seq, X_test_seq
