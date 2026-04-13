@@ -2,6 +2,7 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 # load cleaned dataset
 def load_clean_data(filepath):
@@ -41,3 +42,12 @@ def text_to_sequence(tokenizer, X_train, X_val, X_test):
     X_val_seq = tokenizer.texts_to_sequences(X_val)
     X_test_seq = tokenizer.texts_to_sequences(X_test)
     return X_train_seq, X_val_seq, X_test_seq
+
+# Padding 
+def apply_padding(X_train_seq, X_val_seq, X_test_seq, max_len = 100):
+    X_train_pad = pad_sequences(X_train_seq, maxlen = max_len, padding = "post", truncating = "post")
+    X_val_pad = pad_sequences(X_val_seq, maxlen = max_len, padding = "post", truncating = "post")
+    X_test_pad = pad_sequences(X_test_seq, maxlen = max_len, padding = "post", truncating = "post")
+    return X_train_pad, X_val_pad, X_test_pad
+
+
