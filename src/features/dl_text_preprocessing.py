@@ -1,6 +1,7 @@
 # import libraries
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from tensorflow.keras.preprocessing.text import Tokenizer
 
 # load cleaned dataset
 def load_clean_data(filepath):
@@ -27,3 +28,9 @@ def split_data(df):
     )
 
     return X_train, X_val, X_test, y_train, y_val, y_test
+
+# Tokenization
+def build_tokenizer(X_train, max_words = 20000):
+    tokenizer = Tokenizer(num_words = max_words, oov_token = "<OOV>")
+    tokenizer.fit_on_texts(X_train)
+    return tokenizer
