@@ -47,7 +47,7 @@ def text_to_sequence(tokenizer, X_train, X_val, X_test):
     return X_train_seq, X_val_seq, X_test_seq
 
 # Padding 
-def apply_padding(X_train_seq, X_val_seq, X_test_seq, max_len = 100):
+def apply_padding(X_train_seq, X_val_seq, X_test_seq, max_len = 20):
     X_train_pad = pad_sequences(X_train_seq, maxlen = max_len, padding = "post", truncating = "post")
     X_val_pad = pad_sequences(X_val_seq, maxlen = max_len, padding = "post", truncating = "post")
     X_test_pad = pad_sequences(X_test_seq, maxlen = max_len, padding = "post", truncating = "post")
@@ -79,7 +79,7 @@ def save_outputs(X_train_pad, X_val_pad, X_test_pad, y_train, y_val, y_test, tok
 
     # save meta info
     meta = {
-        "max_len": 100,
+        "max_len": 20,
         "max_words": 20000
     }
     with open(FEATURES_DIR / "meta.pkl", "wb") as f:
