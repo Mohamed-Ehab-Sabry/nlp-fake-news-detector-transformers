@@ -210,6 +210,7 @@ __marimo__/
 data/raw/*
 data/processed/*
 data/saved_features/*
+data/dl_features/*
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 !data/README.md

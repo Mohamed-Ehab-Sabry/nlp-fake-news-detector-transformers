@@ -90,4 +90,22 @@ def save_outputs(X_train_pad, X_val_pad, X_test_pad, y_train, y_val, y_test, tok
     with open(FEATURES_DIR / "label_map.pkl", "wb") as f:
         pickle.dump(label_map, f)
 
-    print("All dL outputs saved successfully ")    
+    print("All outputs saved successfully ")    
+
+def main():
+    df = load_clean_data(DATA_PATH)
+
+    X_train, X_val, X_test, y_train, y_val, y_test = split_data(df)
+
+    tokenizer = build_tokenizer(X_train)
+
+    X_train_seq, X_val_seq, X_test_seq = text_to_sequence(tokenizer, X_train, X_val, X_test)
+
+    X_train_pad, X_val_pad, X_test_pad = apply_padding(X_train_seq, X_val_seq, X_test_seq)
+
+    save_outputs(X_train_pad, X_val_pad, X_test_pad, y_train, y_val, y_test, tokenizer)
+
+    print("\nFeature engineering completed successfully!")
+if __name__ == "__main__":
+    main()
+    
