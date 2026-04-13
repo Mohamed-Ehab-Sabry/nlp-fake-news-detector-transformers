@@ -3,6 +3,9 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
+from pathlib import Path
+import pickle
+import numpy as np
 
 # load cleaned dataset
 def load_clean_data(filepath):
@@ -50,4 +53,41 @@ def apply_padding(X_train_seq, X_val_seq, X_test_seq, max_len = 100):
     X_test_pad = pad_sequences(X_test_seq, maxlen = max_len, padding = "post", truncating = "post")
     return X_train_pad, X_val_pad, X_test_pad
 
+# project path
+BASE_DIR = Path(__file__).resolve().parents[2]
+DATA_DIR = BASE_DIR / "data"
+DATA_PATH = DATA_DIR / "processed" / "processed.csv"
+FEATURES_DIR = DATA_DIR / "dl_features"
+FEATURES_DIR.mkdir(parents=True, exist_ok=True)
 
+# save everything
+def save_outputs(X_train_pad, X_val_pad, X_test_pad, y_train, y_val, y_test, tokenizer):
+
+    # save tokenizer
+    with open(FEATURES_DIR / "tokenizer.pkl", "wb") as f:
+        pickle.dump(tokenizer, f)
+
+    # save padded sequences
+    np.save(FEATURES_DIR / "X_train_pad.npy", X_train_pad)
+    np.save(FEATURES_DIR / "X_val_pad.npy", X_val_pad)
+    np.save(FEATURES_DIR / "X_test_pad.npy", X_test_pad)
+
+    # save labels
+    np.save(FEATURES_DIR / "y_train.npy", y_train)
+    np.save(FEATURES_DIR / "y_val.npy", y_val)
+    np.save(FEATURES_DIR / "y_test.npy", y_test)
+
+    # save meta info
+    meta = {
+        "max_len": 100,
+        "max_words": 20000
+    }
+    with open(FEATURES_DIR / "meta.pkl", "wb") as f:
+        pickle.dump(meta, f)
+
+    # save label mapping
+    label_map = {0: "negative", 1: "positive"}
+    with open(FEATURES_DIR / "label_map.pkl", "wb") as f:
+        pickle.dump(label_map, f)
+
+    print("All dL outputs saved successfully ")    
