@@ -81,8 +81,8 @@ def processed_data(filepath, output_file="processed.csv"):
   print("Removing nulls, empty values, and duplicates...")
   df = clean_dataframe(df, 'cleaned_text')
 
-  print("Saving dataset...")
-  df[['cleaned_text', 'target']].to_csv(output_file, index=False)
+#   print("Saving dataset...")
+#   df[['cleaned_text', 'target']].to_csv(output_file, index=False)
 
   print(f"Cleaned dataset saved as {output_file}")
 
